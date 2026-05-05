@@ -63,7 +63,7 @@ document.addEventListener('mousemove', (e) => {
   resize();
   window.addEventListener('resize', resize);
 
-  const GOLD = ['#c9a84c', '#e8c96a', '#f5e090', '#b8923a', '#fff8dc'];
+  const GOLD = ['#B9915B', '#d4aa7a', '#e8c9a0', '#a07040', '#F5F4F3'];
   const particles = [];
 
   function createBurst(x, y, count) {
