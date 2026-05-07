@@ -752,20 +752,41 @@ strong { color: var(--text); }
 @media (max-width: 900px) {
   .bento-card.wide { grid-column: span 1; }
   .bento-grid { grid-template-columns: 1fr 1fr; }
-  .rituais-grid { grid-template-columns: 1fr; }
+  .rituais-grid { grid-template-columns: 1fr 1fr; }
   .tips-grid { grid-template-columns: 1fr 1fr; }
-  .squads-grid { grid-template-columns: 1fr; }
+  .squads-grid { grid-template-columns: 1fr 1fr; }
+  .tools-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 767px) {
-  .section { padding: 80px 0; }
+  .section { padding: 64px 0; }
+  .section-sub { font-size: 15px; margin-bottom: 40px; }
+
+  /* grids */
   .bento-grid { grid-template-columns: 1fr; }
   .tips-grid { grid-template-columns: 1fr; }
-  .nivel-compare { grid-template-columns: 1fr; }
+  .rituais-grid { grid-template-columns: 1fr; }
+  .squads-grid { grid-template-columns: 1fr; }
+  .tools-grid { grid-template-columns: 1fr; }
+
+  /* carreira */
+  .nivel-compare { grid-template-columns: 1fr; gap: 12px; }
   .nivel-arrow-col { display: none; }
+  .nivel-col { padding: 24px 20px; }
+  .pdi-cta {
+    flex-direction: column; align-items: flex-start;
+    padding: 24px 20px; gap: 20px;
+  }
+  .pdi-btn { width: 100%; text-align: center; }
+
+  /* funil */
   .funil-wrapper { flex-direction: column; }
-  .funil-step { border-radius: var(--radius) !important; }
+  .funil-step { border-radius: var(--radius) !important; min-width: 0; }
   .funil-arrow { transform: rotate(90deg); padding: 4px 0; }
+
+  /* navbar */
   .nav-title { display: none; }
+
+  /* vcards carousel */
   .vcards-wrapper {
     overflow-x: auto; overflow-y: visible;
     scroll-snap-type: x mandatory;
@@ -778,6 +799,13 @@ strong { color: var(--text); }
     transform: none !important; transition: none !important;
   }
   .vcard { width: 82vw; scroll-snap-align: center; }
+
+  /* icp table */
+  .icp-table { font-size: 12px; }
+  .icp-table thead th,
+  .icp-table tbody td { padding: 10px 10px; }
+
+  /* cursor off */
   .cursor, .cursor-dot { display: none; }
   body { cursor: auto; }
 }
