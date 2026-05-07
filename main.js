@@ -219,64 +219,62 @@ gsap.from('.hero-line-1, .hero-line-2', {
 // Section headlines use scroll-triggered split
 splitAndReveal('.section-headline');
 
-// ── FADE UP REVEALS ──
-gsap.utils.toArray('.reveal').forEach(el => {
-  gsap.from(el, {
-    scrollTrigger: { trigger: el, start: 'top 95%' },
-    y: 60, opacity: 0, duration: 1, ease: 'power3.out'
-  });
-});
-
-gsap.utils.toArray('.reveal-fade').forEach(el => {
-  gsap.from(el, {
-    scrollTrigger: { trigger: el, start: 'top 95%' },
-    y: 30, opacity: 0, duration: 0.8, ease: 'power2.out'
-  });
-});
-
-// Bento cards — single trigger on the grid, clean stagger
-gsap.from('.bento-card', {
-  scrollTrigger: { trigger: '.bento-grid', start: 'top 80%' },
-  y: 40, opacity: 0, duration: 0.7,
-  stagger: { amount: 0.5, from: 'start' },
-  ease: 'power3.out'
-});
-
-// Funil — single trigger, stagger on steps only (not arrows)
-gsap.from('.funil-step', {
-  scrollTrigger: { trigger: '.funil-wrapper', start: 'top 75%' },
-  y: 40, opacity: 0, duration: 0.7,
-  stagger: { amount: 0.4, from: 'start' },
-  ease: 'power3.out'
-});
-gsap.from('.funil-arrow', {
-  scrollTrigger: { trigger: '.funil-wrapper', start: 'top 75%' },
-  opacity: 0, duration: 0.4, delay: 0.3,
-  stagger: 0.1, ease: 'power2.out'
-});
-
-// Tips stagger — single trigger on grid
-gsap.from('.tip-card', {
-  scrollTrigger: { trigger: '.tips-grid', start: 'top 80%' },
-  y: 40, opacity: 0, duration: 0.7,
-  stagger: { amount: 0.5, from: 'start' },
-  ease: 'power3.out'
-});
-
 // Force ScrollTrigger refresh after Lenis init
 setTimeout(() => ScrollTrigger.refresh(), 300);
 
-// ── DESKTOP-ONLY ──
+// ── MATCHMEDIA: all scroll animations ──
 const mm = gsap.matchMedia();
 
 mm.add('(min-width: 768px)', () => {
+  // ── REVEALS ──
+  gsap.utils.toArray('.reveal').forEach(el => {
+    gsap.from(el, {
+      scrollTrigger: { trigger: el, start: 'top 90%' },
+      y: 60, opacity: 0, duration: 1, ease: 'power3.out'
+    });
+  });
+  gsap.utils.toArray('.reveal-fade').forEach(el => {
+    gsap.from(el, {
+      scrollTrigger: { trigger: el, start: 'top 90%' },
+      y: 30, opacity: 0, duration: 0.8, ease: 'power2.out'
+    });
+  });
+
+  // Bento cards
+  gsap.from('.bento-card', {
+    scrollTrigger: { trigger: '.bento-grid', start: 'top 80%' },
+    y: 40, opacity: 0, duration: 0.7,
+    stagger: { amount: 0.5, from: 'start' },
+    ease: 'power3.out'
+  });
+
+  // Funil
+  gsap.from('.funil-step', {
+    scrollTrigger: { trigger: '.funil-wrapper', start: 'top 75%' },
+    y: 40, opacity: 0, duration: 0.7,
+    stagger: { amount: 0.4, from: 'start' },
+    ease: 'power3.out'
+  });
+  gsap.from('.funil-arrow', {
+    scrollTrigger: { trigger: '.funil-wrapper', start: 'top 75%' },
+    opacity: 0, duration: 0.4, delay: 0.3,
+    stagger: 0.1, ease: 'power2.out'
+  });
+
+  // Tips
+  gsap.from('.tip-card', {
+    scrollTrigger: { trigger: '.tips-grid', start: 'top 80%' },
+    y: 40, opacity: 0, duration: 0.7,
+    stagger: { amount: 0.5, from: 'start' },
+    ease: 'power3.out'
+  });
+
   // ── CURSOR ──
   const cursor = document.querySelector('.cursor');
   const cursorDot = document.querySelector('.cursor-dot');
   let mouseX = -200, mouseY = -200, curX = -200, curY = -200;
   let cursorVisible = false;
 
-  // Hide cursor until first mouse move
   gsap.set(cursor, { opacity: 0, x: -200, y: -200 });
   gsap.set(cursorDot, { opacity: 0, x: -200, y: -200 });
 
@@ -333,12 +331,11 @@ mm.add('(min-width: 768px)', () => {
 });
 
 mm.add('(max-width: 767px)', () => {
-  gsap.utils.toArray('.reveal').forEach(el => {
-    gsap.from(el, {
-      scrollTrigger: { trigger: el, start: 'top 92%' },
-      y: 30, opacity: 0, duration: 0.6, ease: 'power2.out'
-    });
+  // Em mobile: sem animação — elementos já visíveis
+  gsap.utils.toArray('.reveal, .reveal-fade').forEach(el => {
+    gsap.set(el, { opacity: 1, y: 0 });
   });
+  gsap.set('.bento-card, .funil-step, .funil-arrow, .tip-card', { opacity: 1, y: 0 });
 });
 
 // ── CAROUSEL (Pessoas) ──
