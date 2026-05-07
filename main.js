@@ -1,16 +1,20 @@
 // ── GSAP SETUP ──
 gsap.registerPlugin(ScrollTrigger);
 
-// ── LENIS ──
-const lenis = new Lenis({
-  duration: 1.2,
-  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-});
-function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-requestAnimationFrame(raf);
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add((time) => lenis.raf(time * 1000));
-gsap.ticker.lagSmoothing(0);
+// ── LENIS (desktop only) ──
+const isMobileDevice = window.innerWidth <= 767;
+let lenis = null;
+if (!isMobileDevice) {
+  lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+  });
+  function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+}
 
 // ── REDUCED MOTION ──
 if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -176,20 +180,21 @@ document.addEventListener('mousemove', (e) => {
 })();
 
 // ── HERO ENTRY ──
-gsap.set('.hero-badge, .hero-sub, .hero-cta, .hero-scroll-hint', { opacity: 0, y: 30 });
+if (!isMobileDevice) {
+  gsap.set('.hero-badge, .hero-sub, .hero-cta, .hero-scroll-hint', { opacity: 0, y: 30 });
+  window.addEventListener('load', () => {
+    const tl = gsap.timeline({ delay: 0.3 });
+    tl.to('.hero-badge', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+      .to('.hero-sub',   { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.4')
+      .to('.hero-cta',   { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.4')
+      .to('.hero-scroll-hint', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.2');
+  });
+}
 
-window.addEventListener('load', () => {
-  const tl = gsap.timeline({ delay: 0.3 });
-  tl.to('.hero-badge', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
-    .to('.hero-sub',   { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.4')
-    .to('.hero-cta',   { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.4')
-    .to('.hero-scroll-hint', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.2');
-});
-
-// ── SPLIT TEXT ──
+// ── SPLIT TEXT (desktop only) ──
 function splitAndReveal(selector) {
+  if (isMobileDevice) return;
   document.querySelectorAll(selector).forEach(el => {
-    // Use innerText to get rendered text (resolves &amp; etc), preserve <br>
     const html = el.innerHTML;
     const parts = html.split(/(<br\s*\/?>)/gi);
     const rebuilt = parts.map(part => {
@@ -209,14 +214,16 @@ function splitAndReveal(selector) {
   });
 }
 
-// Hero headline — animate directly without split to avoid opacity:0 issues
-gsap.from('.hero-line-1, .hero-line-2', {
-  delay: 0.3,
-  y: 40, opacity: 0, duration: 1,
-  stagger: 0.15, ease: 'power4.out'
-});
+// Hero headline
+if (!isMobileDevice) {
+  gsap.from('.hero-line-1, .hero-line-2', {
+    delay: 0.3,
+    y: 40, opacity: 0, duration: 1,
+    stagger: 0.15, ease: 'power4.out'
+  });
+}
 
-// Section headlines use scroll-triggered split
+// Section headlines
 splitAndReveal('.section-headline');
 
 // Force ScrollTrigger refresh after Lenis init
